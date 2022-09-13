@@ -1,3 +1,4 @@
+from ast import parse
 from flask import Flask, render_template, request
 import json
 
@@ -8,14 +9,12 @@ app = Flask(__name__)
 def index():
     if request.method == "POST":
         jsonData = request.get_json()
-    
-
-        json_object = json.dumps(jsonData, indent=1)
- 
-        # Writing to sample.json
-        with open("sample.json", "w") as outfile:
-            outfile.write(json_object)
-        
+        dictionary = {str(len(jsonData["status"])):str(jsonData["area"])}
+        with open('sample.json') as f:
+            data = json.load(f)
+        data.update(dictionary)
+        with open('sample.json', 'w') as f:
+            json.dump(data, f)
         return {
             'response' : 'I am the response'
         }

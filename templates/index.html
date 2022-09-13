@@ -12,23 +12,21 @@
         // global vars
         var dragging = false, drawing = false, startPoint;
         var svg = d3.select('body').append('svg')
-            .attr('height', 5000)
-            .attr('width', 5000)
+            .attr('height', 742)
+            .attr('width', 1296)
         var imgs = svg.selectAll("image").data([0]);
         imgs.enter()
             .append("svg:image")
-            .attr("xlink:href", "../static/images.png")
+            .attr("xlink:href", "../static/50.jpg")
             .attr("x", "0")
             .attr("y", "0")
             .attr("width", "1296")
             .attr("height", "742");
 
         var points = [], g;
-
-       
         let status = [];
-
         let area = [];
+
         // behaviors
         var dragger = d3.behavior.drag()
             .on('drag', handleDrag)
@@ -65,11 +63,18 @@
             }
 
            
-            for (let i = 0; i < points.length; i++) {
-                area.push([points[i][0], points[i][1]], status);
+            if (status[0] == 1){
+                area = []
             }
-            
-            let data = {area};
+
+            for (let i = 0; i < points.length; i++) {
+                area.push([points[i][0], points[i][1]]);
+               
+            }
+           
+           
+            let data = {"status": status,
+                        "area": area};
             const myJSON = JSON.stringify(data);
             console.log(myJSON);
 
@@ -120,7 +125,13 @@
             points.splice(0);
             drawing = false;
             console.log(drawing);
-            status.push(drawing);
+            if (drawing == false){
+                status.push(1);
+            }else{
+                drawing = 0;
+                status.push(drawing);
+            }
+         
         }
         svg.on('mousemove', function () {
             if (!drawing) return;
